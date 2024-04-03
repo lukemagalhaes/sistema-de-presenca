@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Table(name="Professores")
-@Entity(name="Professores")
+@Table(name="Turmas")
+@Entity(name="Turmas")
 @Getter
 
 public class Turma {
