@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 public class Aluno {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tia;
-    private String nome;
+    private Long num_matricula;
+    private String usuario;
+    private String senha;
+
+    
 }
