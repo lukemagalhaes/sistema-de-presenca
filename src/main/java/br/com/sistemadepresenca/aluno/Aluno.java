@@ -12,7 +12,7 @@ import lombok.Getter;
 public class Aluno {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_aluno;
+    private Long id_aluno;
 
     @ManyToOne
     @JoinColumn(name = "id_turma")
