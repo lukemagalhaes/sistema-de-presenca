@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Presenças - Escola Octógono</title>
+    <style>
+        /* Estilos CSS aqui */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #990000;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #000000;
+            text-align: center;
+        }
+
+        .turma {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ddd;
+            color: #333;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .edit-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            visibility: visible; /* Garante que o ícone de edição esteja sempre visível */
+        }
+
+        .presente {
+            color: #008000; /* Verde */
+        }
+
+        .ausente {
+            color: #ff0000; /* Vermelho */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Escola Octógono - Controle de Presenças
+    </header>
+
+    <div class="container">
+        <h2>Relatório de Presenças por Turma</h2>
+        <div id="relatorio"></div>
+    </div>
+
+    <script>
+        window.onload = gerarRelatorio;
+
+        function gerarRelatorio() {
+            const relatorioDiv = document.getElementById('relatorio');
+            relatorioDiv.innerHTML = ''; // Limpa o conteúdo anterior
+
+            const dadosExemplo = [
+                { turma: '1º Ano', alunos: ['João', 'Maria', 'Pedro', 'Ana'] },
+                { turma: '2º Ano', alunos: ['Carlos', 'Mariana', 'Lucas', 'Julia'] },
+                { turma: '3º Ano', alunos: ['Fernanda', 'Roberto', 'Camila', 'Rafael'] },
+                { turma: '4º Ano', alunos: ['Eduardo', 'Larissa', 'Mateus', 'Sofia'] },
+                { turma: '5º Ano', alunos: ['Gustavo', 'Carolina', 'Gabriel', 'Isabela'] }
+            ];
+
+            dadosExemplo.forEach(turma => {
+                const turmaDiv = document.createElement('div');
+                turmaDiv.classList.add('turma');
+                turmaDiv.innerHTML = `<h3>Turma: ${turma.turma}</h3>`;
+
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+
+                const headerRow = document.createElement('tr');
+                const th1 = document.createElement('th');
+                th1.textContent = 'Aluno';
+                const th2 = document.createElement('th');
+                th2.textContent = 'Presença';
+                headerRow.appendChild(th1);
+                headerRow.appendChild(th2);
+                thead.appendChild(headerRow);
+
+                turma.alunos.forEach(aluno => {
+                    const row = document.createElement('tr');
+                    const td1 = document.createElement('td');
+                    td1.textContent = aluno;
+                    const td2 = document.createElement('td');
+                    td2.textContent = 'Presente'; // Por padrão, todos os alunos estão presentes
+                    td2.classList.add('presente'); // Por padrão, a presença é marcada como presente
+                    td2.addEventListener('click', () => togglePresenca(td2));
+                    const editIcon = document.createElement('span');
+                    editIcon.innerHTML = '&#9998;'; // Ícone de lápis
+                    editIcon.classList.add('edit-icon');
+                    td2.appendChild(editIcon);
+
+                    row.appendChild(td1);
+                    row.appendChild(td2);
+                    tbody.appendChild(row);
+                });
+
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                turmaDiv.appendChild(table);
+                relatorioDiv.appendChild(turmaDiv);
+            });
+        }
+
+        function togglePresenca(td) {
+            if (td.classList.contains('presente')) {
+                td.textContent = 'Ausente';
+                td.classList.remove('presente');
+                td.classList.add('ausente');
+            } else {
+                td.textContent = 'Presente';
+                td.classList.remove('ausente');
+                td.classList.add('presente');
+            }
+        }
+    </script>
+</body>
+</html>
