@@ -75,7 +75,7 @@ public class AlunoController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
     public ResponseEntity<Aluno> updateAluno(@RequestBody Aluno data) {
         try {
-            if (data.getId() > 0) {
+            if (data.getId_aluno() > 0) {
                 Aluno updateAluno = repository.save(data);
                 return ResponseEntity.ok(updateAluno);
             } else {
@@ -93,9 +93,9 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Aluno apagado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Void> deleteAluno(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAluno(@PathVariable Long id_aluno) {
         try {
-            repository.deleteById(id);
+            repository.deleteById(id_aluno);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -109,9 +109,9 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Aluno específico buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<AlunoResponseDTO> getAlunoById(@PathVariable Long id) {
+    public ResponseEntity<AlunoResponseDTO> getAlunoById(@PathVariable Long id_aluno) {
         try {
-            Aluno aluno = repository.findById(id)
+            Aluno aluno = repository.findById(id_aluno)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
             return ResponseEntity.ok(new AlunoResponseDTO(aluno));
         } catch (Exception ex) {

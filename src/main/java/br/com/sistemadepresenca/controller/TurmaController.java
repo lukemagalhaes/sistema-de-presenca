@@ -71,7 +71,7 @@ public class TurmaController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
     public ResponseEntity<Turma> updateTurma(@RequestBody Turma data) {
         try {
-            if (data.getId() > 0) {
+            if (data.getId_turma() > 0) {
                 Turma updateTurma = repository.save(data);
                 return ResponseEntity.ok(updateTurma);
             } else {
@@ -119,9 +119,9 @@ public class TurmaController {
             @ApiResponse(responseCode = "200", description = "Turma salva com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<List<TurmaResponseDTO>> buscarPorNome(@RequestParam String turma) {
+    public ResponseEntity<List<TurmaResponseDTO>> buscarPorSerie(@RequestParam String serie) {
         try {
-            List<TurmaResponseDTO> turmaList = repository.findByNomeContainingIgnoreCase(turma)
+            List<TurmaResponseDTO> turmaList = repository.findBySerieContainingIgnoreCase(serie)
                     .stream()
                     .map(TurmaResponseDTO::new)
                     .collect(Collectors.toList());
