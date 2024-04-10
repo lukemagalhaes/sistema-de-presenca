@@ -14,5 +14,10 @@ public class Aluno {
     private String usuario;
     private String senha;
 
+    public Aluno(AlunoRequestDTO data) {
+        this.num_matricula = data.num_matricula();
+        this.usuario = data.usuario();
+        this.senha = data.senha();
+    }
     
 }

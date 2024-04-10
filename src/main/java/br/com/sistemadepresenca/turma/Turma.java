@@ -17,4 +17,8 @@ public class Turma {
 
     private long id;
     private String anoEnsino;
+
+    public Turma(TurmaRequestDTO data){
+        this.anoEnsino = data.anoEnsino();
+    }
 }

@@ -18,4 +18,9 @@ public class Falta {
     private long id;
     private String data;
     private String justificativa;
+
+    public Falta(FaltaRequestDTO data){
+        this.data = data.data();
+        this.justificativa = data.justificativa();
+    }
 }

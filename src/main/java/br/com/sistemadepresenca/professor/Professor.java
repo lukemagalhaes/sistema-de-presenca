@@ -20,4 +20,11 @@ public class Professor {
     private String senha;
     private String perfil;
     private String email;
+
+    public Professor(ProfessorRequestDTO data){
+        this.usuario = data.usuario();
+        this.senha = data.senha();
+        this.perfil = data.perfil();
+        this.email = data.email();
+    }
 }

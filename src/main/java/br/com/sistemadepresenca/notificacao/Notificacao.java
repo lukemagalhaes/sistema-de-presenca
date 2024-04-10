@@ -17,4 +17,8 @@ public class Notificacao {
 
     private long id;
     private String mensagem;
+
+    public Notificacao(NotificacaoRequestDTO data){
+        this.mensagem = data.mensagem();
+    }
 }

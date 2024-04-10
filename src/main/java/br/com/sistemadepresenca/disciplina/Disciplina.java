@@ -26,11 +26,3 @@ public class Disciplina {
     }
 
 }
-
-
-// public class Aluno {
-
-//     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long tia;
-//     private String nome;
-// }

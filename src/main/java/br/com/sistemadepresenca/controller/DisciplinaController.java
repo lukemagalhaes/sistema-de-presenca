@@ -1,18 +1,20 @@
 package br.com.sistemadepresenca.controller;
-
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.sistemadepresenca.aluno.Aluno;
-import br.com.sistemadepresenca.aluno.AlunoRepository;
-import br.com.sistemadepresenca.aluno.AlunoRequestDTO;
-import br.com.sistemadepresenca.aluno.AlunoResponseDTO;
+import br.com.sistemadepresenca.disciplina.Disciplina;
+import br.com.sistemadepresenca.disciplina.DisciplinaRepository;
+import br.com.sistemadepresenca.disciplina.DisciplinaRequestDTO;
+import br.com.sistemadepresenca.disciplina.DisciplinaResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,28 +28,25 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
-@RequestMapping("/api/alunos")
-@Tag(name = "Controller Aluno", description = "Métodos HTTP dos alunos")
+@RequestMapping("/api/disciplinas")
+@Tag(name = "Controller disciplina", description = "Métodos HTTP das disciplinas")
 
-public class AlunoController {
+public class DisciplinaController {
     @Autowired
-    private AlunoRepository repository;
+    private DisciplinaRepository repository;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    @Operation(summary = "Salvar aluno", description = "Salva um novo aluno.", tags = { "Alunos" })
+    @Operation(summary = "Salvar disciplina", description = "Salva uma nova disciplina.", tags = { "Disciplinas" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Aluno salvo com sucesso"),
+            @ApiResponse(responseCode = "200", description = "disciplina salva com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Void> saveAluno(@RequestBody @Valid AlunoRequestDTO data) {
+    public ResponseEntity<Void> saveDisciplina(@RequestBody @Valid DisciplinaRequestDTO data) {
         try {
-            Aluno alunoData = new Aluno(data);
-            repository.save(alunoData);
+            Disciplina disciplinaData = new Disciplina(data);
+            repository.save(disciplinaData);
             return ResponseEntity.ok().build();
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();
@@ -55,29 +54,29 @@ public class AlunoController {
     }
 
     @GetMapping
-    @Operation(summary = "Listar alunos", description = "Retorna a lista de alunos cadastrados", tags = {
-        "alunos" })
+    @Operation(summary = "Listar disciplina", description = "Retorna a lista de disciplina cadastrados", tags = {
+        "Disciplinas" })
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "aluno encontarado com sucesso"),
+        @ApiResponse(responseCode = "200", description = "disciplina encontarada com sucesso"),
         @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
         @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public List<Aluno> getAll(){
-        List<Aluno>  listaAluno = repository.findAll();
-        return listaAluno;
+    public List<Disciplina> getAll(){
+        List<Disciplina>  listaDisciplina = repository.findAll();
+        return listaDisciplina;
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Atualizar aluno", description = "Atualiza um aluno da lista passando o ID como parâmetro.", tags = {
-            "Alunos" })
+    @Operation(summary = "Atualizar disciplina", description = "Atualiza um disciplina da lista passando o ID como parâmetro.", tags = {
+            "Disciplinas" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Aluno atualizado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Disciplina atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Aluno> updateAluno(@RequestBody Aluno data) {
+    public ResponseEntity<Disciplina> updateDisciplina(@RequestBody Disciplina data) {
         try {
             if (data.getId() > 0) {
-                Aluno updateAluno = repository.save(data);
-                return ResponseEntity.ok(updateAluno);
+                Disciplina updateDisciplina = repository.save(data);
+                return ResponseEntity.ok(updateDisciplina);
             } else {
                 return ResponseEntity.badRequest().build();
             }
@@ -87,13 +86,13 @@ public class AlunoController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletar aluno", description = "Manda uma requisição que apaga um aluno passado como parâmetro", tags = {
-            "Alunos" })
+    @Operation(summary = "Deletar disciplina", description = "Manda uma requisição que apaga um disciplina passado como parâmetro", tags = {
+            "Disciplina" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Aluno apagado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Disciplina apagada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Void> deleteAluno(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDisciplina(@PathVariable Long id) {
         try {
             repository.deleteById(id);
             return ResponseEntity.ok().build();
@@ -103,38 +102,37 @@ public class AlunoController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consultar aluno específico", description = "Consulta na lista de alunos o ID passado como parâmetro", tags = {
-            "Alunos" })
+    @Operation(summary = "Consultar disciplina específico", description = "Consulta na lista de disciplinas o ID passado como parâmetro", tags = {
+            "Disciplinas" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Aluno específico buscado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Disciplina específico buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<AlunoResponseDTO> getAlunoById(@PathVariable Long id) {
+    public ResponseEntity<DisciplinaResponseDTO> getDisciplinaById(@PathVariable Long id) {
         try {
-            Aluno aluno = repository.findById(id)
+            Disciplina disciplina = repository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
-            return ResponseEntity.ok(new AlunoResponseDTO(aluno));
+            return ResponseEntity.ok(new DisciplinaResponseDTO(disciplina));
         } catch (Exception ex) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/buscar")
-    @Operation(summary = "Buscar aluno", description = "Busca pelo nome e retorna suas informações.", tags = { "Alunos" })
+    @Operation(summary = "Buscar disciplina", description = "Busca pelo nome e retorna suas informações.", tags = { "Disciplinas" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Aluno buscado com sucesso"),
+            @ApiResponse(responseCode = "200", description = "Disciplina buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<List<AlunoResponseDTO>> buscarPorNome(@RequestParam String aluno) {
+    public ResponseEntity<List<DisciplinaResponseDTO>> buscarPorNome(@RequestParam String disciplina) {
         try {
-            List<AlunoResponseDTO> alunoList = repository.findByNomeContainingIgnoreCase(aluno)
+            List<DisciplinaResponseDTO> disciplinaList = repository.findByNomeContainingIgnoreCase(disciplina)
                     .stream()
-                    .map(AlunoResponseDTO::new)
+                    .map(DisciplinaResponseDTO::new)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok().body(alunoList);
+            return ResponseEntity.ok().body(disciplinaList);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }
