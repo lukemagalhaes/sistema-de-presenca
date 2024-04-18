@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com</groupId>
 	<artifactId>sistema-de-presenca</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>sistema-de-presenca</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
