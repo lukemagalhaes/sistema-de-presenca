@@ -21,7 +21,7 @@ COPY . .
 
 # Constrói o frontend Angular
 WORKDIR /app/Angular-sistem-de-presenca
-RUN npm install && ng build --prod
+RUN npm install && ng build --configuration=production
 
 # Volta ao diretório raiz do projeto
 WORKDIR /app
