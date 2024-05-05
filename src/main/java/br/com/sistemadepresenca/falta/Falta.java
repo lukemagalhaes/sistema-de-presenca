@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Getter
-@Table(name="falta")
-@Entity(name="falta")
+@Table(name = "falta")
+@Entity(name = "falta")
 
 public class Falta {
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_presenca;
 
@@ -31,7 +31,10 @@ public class Falta {
     private boolean presenca;
     private String justificativa;
 
-    public Falta(FaltaRequestDTO data){
+    public Falta() {
+    }
+
+    public Falta(FaltaRequestDTO data) {
         this.aluno = data.aluno();
         this.aula = data.aula();
         this.presenca = data.presenca();

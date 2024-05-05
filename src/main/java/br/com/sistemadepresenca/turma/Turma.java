@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Table(name="turma")
+@Table(name = "turma")
 @Entity
 @Getter
 public class Turma {
@@ -22,11 +22,11 @@ public class Turma {
     private String serie;
     private String periodo;
 
-    public Turma(){
-        
+    public Turma() {
+
     }
 
-    public Turma(TurmaRequestDTO data){
+    public Turma(TurmaRequestDTO data) {
         this.anoEnsino = data.anoEnsino();
         this.serie = data.serie();
         this.periodo = data.periodo();

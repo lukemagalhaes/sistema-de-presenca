@@ -58,8 +58,8 @@ public class ProfessorController {
             @ApiResponse(responseCode = "200", description = "Professor salva com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public List<Professor> getAll(){
-        List<Professor>  listaProfessor = repository.findAll();
+    public List<Professor> getAll() {
+        List<Professor> listaProfessor = repository.findAll();
         return listaProfessor;
     }
 

@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-@Table(name="professor")
-@Entity(name="professor")
+@Table(name = "professor")
+@Entity(name = "professor")
 @Getter
 
 public class Professor {
@@ -20,7 +20,11 @@ public class Professor {
     private String disciplina;
     private String formacao;
 
-    public Professor(ProfessorRequestDTO data){
+    public Professor() {
+
+    }
+
+    public Professor(ProfessorRequestDTO data) {
         this.nome = data.nome();
         this.disciplina = data.disciplina();
         this.formacao = data.formacao();

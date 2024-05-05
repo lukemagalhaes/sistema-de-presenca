@@ -6,12 +6,13 @@ import br.com.sistemadepresenca.turma.Turma;
 import jakarta.persistence.*;
 import lombok.Getter;
 
-@Table(name="aluno")
-@Entity(name="aluno")
+@Table(name = "aluno")
+@Entity(name = "aluno")
 @Getter
 public class Aluno {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_aluno;
 
     @ManyToOne
@@ -34,5 +35,5 @@ public class Aluno {
         this.dataNascimento = data.dataNascimento();
         this.endereco = data.endereco();
     }
-    
+
 }

@@ -8,5 +8,4 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     Collection<Professor> findByNomeContainingIgnoreCase(String professor);
 
-    
-} 
+}

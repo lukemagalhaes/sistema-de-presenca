@@ -58,8 +58,8 @@ public class TurmaController {
             @ApiResponse(responseCode = "200", description = "Turma salva com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public List<Turma> getAll(){
-        List<Turma>  listaTurma = repository.findAll();
+    public List<Turma> getAll() {
+        List<Turma> listaTurma = repository.findAll();
         return listaTurma;
     }
 

@@ -1,4 +1,5 @@
 package br.com.sistemadepresenca.aula;
+
 import java.sql.Date;
 
 import br.com.sistemadepresenca.professor.Professor;
@@ -13,8 +14,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name="aula")
-@Entity(name="aula")
+@Table(name = "aula")
+@Entity(name = "aula")
 @Getter
 @NoArgsConstructor
 
@@ -35,7 +36,7 @@ public class Aula {
     private String tipo;
     private String conteudo;
 
-    public Aula(AulaRequestDTO data){
+    public Aula(AulaRequestDTO data) {
         this.turma = data.turma();
         this.professor = data.professor();
         this.data = data.data();

@@ -56,13 +56,13 @@ public class AlunoController {
 
     @GetMapping
     @Operation(summary = "Listar alunos", description = "Retorna a lista de alunos cadastrados", tags = {
-        "alunos" })
+            "alunos" })
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "aluno encontarado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
-        @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public List<Aluno> getAll(){
-        List<Aluno>  listaAluno = repository.findAll();
+            @ApiResponse(responseCode = "200", description = "aluno encontarado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+    public List<Aluno> getAll() {
+        List<Aluno> listaAluno = repository.findAll();
         return listaAluno;
     }
 
@@ -109,18 +109,19 @@ public class AlunoController {
             @ApiResponse(responseCode = "200", description = "Aluno específico buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<AlunoResponseDTO> getAlunoById(@PathVariable Long id_aluno) {
+    public ResponseEntity<AlunoResponseDTO> getAlunoById(@PathVariable("id") Long id_aluno) {
         try {
             Aluno aluno = repository.findById(id_aluno)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             return ResponseEntity.ok(new AlunoResponseDTO(aluno));
         } catch (Exception ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/buscar")
-    @Operation(summary = "Buscar aluno", description = "Busca pelo nome e retorna suas informações.", tags = { "Alunos" })
+    @Operation(summary = "Buscar aluno", description = "Busca pelo nome e retorna suas informações.", tags = {
+            "Alunos" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Aluno buscado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
