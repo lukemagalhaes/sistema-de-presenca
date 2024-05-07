@@ -23,7 +23,7 @@ RUN apt-get install -y nodejs npm
 RUN npm install -g @angular/cli@17.3.6
 
 # Compila o aplicativo Angular
-RUN ng build --configuration=production
+RUN ng build --prod
 
 # Volta ao diretório raiz do projeto
 WORKDIR /app
