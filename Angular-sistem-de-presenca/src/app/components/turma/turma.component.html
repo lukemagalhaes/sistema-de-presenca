@@ -1,0 +1,11 @@
+<p>turma works!</p>
+<ul>
+    @for (post of turma; track post.id) {
+    <li>
+      <h3>Id turma: {{ post.id_turma }}</h3>
+      <h2>Ano de ensino: {{ post.anoEnsino }}</h2>
+      <h2>serie: {{ post.serie }}</h2>
+      <h2>periodo: {{post.periodo}}</h2>
+    </li>
+    }
+  </ul>
