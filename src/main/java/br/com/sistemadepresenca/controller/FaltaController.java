@@ -39,16 +39,16 @@ public class FaltaController {
     @PostMapping
     @Operation(summary = "Salvar falta", description = "Salva uma nova falta.", tags = { "Faltas" })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "falta salva com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "201", description = "Falta salva com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Void> saveFalta(@RequestBody @Valid FaltaRequestDTO data) {
+    public ResponseEntity<Falta> saveFalta(@RequestBody @Valid FaltaRequestDTO data) {
         try {
             Falta faltaData = new Falta(data);
-            repository.save(faltaData);
-            return ResponseEntity.ok().build();
+            Falta savedFalta = repository.save(faltaData);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedFalta);
         } catch (Exception ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
