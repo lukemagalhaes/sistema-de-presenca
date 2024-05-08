@@ -53,6 +53,43 @@ public class FaltaController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/criar")
+    @Operation(summary = "Criar falta", description = "Cria uma nova falta com os dados fornecidos.", tags = { "Faltas" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Falta criada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+    public ResponseEntity<Falta> criarFalta(
+            @RequestParam Long idAluno,
+            @RequestParam Long idAula,
+            @RequestParam boolean presenca,
+            @RequestParam String justificativa) {
+        try {
+            // Aqui você pode adicionar lógica para validar os parâmetros, por exemplo, verificar se os IDs existem no banco de dados
+            
+            // Criar um objeto Aluno e Aula com os IDs fornecidos
+            Aluno aluno = new Aluno();
+            aluno.setId(idAluno);
+            
+            Aula aula = new Aula();
+            aula.setId(idAula);
+            
+            // Criar um objeto Falta com os dados fornecidos
+            Falta falta = new Falta();
+            falta.setAluno(aluno);
+            falta.setAula(aula);
+            falta.setPresenca(presenca);
+            falta.setJustificativa(justificativa);
+            
+            // Salvar a falta no banco de dados
+            Falta savedFalta = repository.save(falta);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedFalta);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping
     @Operation(summary = "Listar falta", description = "Retorna a lista de falta cadastrados", tags = {
             "Faltas" })
