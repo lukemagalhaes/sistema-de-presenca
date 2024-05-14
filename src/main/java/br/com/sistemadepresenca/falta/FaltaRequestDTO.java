@@ -5,7 +5,7 @@ import br.com.sistemadepresenca.aula.Aula;
 import jakarta.validation.constraints.NotEmpty;
 
 public record FaltaRequestDTO(
-        @NotEmpty Long id_presenca,
+        @NotEmpty Long id_falta,
         @NotEmpty Aluno aluno,
         @NotEmpty Aula aula,
         @NotEmpty boolean presenca,

@@ -1,6 +1,7 @@
 package br.com.sistemadepresenca.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.sistemadepresenca.aluno.Aluno;
+import br.com.sistemadepresenca.aluno.AlunoRepository;
+import br.com.sistemadepresenca.aula.Aula;
+import br.com.sistemadepresenca.aula.AulaRepository;
 import br.com.sistemadepresenca.falta.Falta;
 import br.com.sistemadepresenca.falta.FaltaRepository;
-import br.com.sistemadepresenca.falta.FaltaRequestDTO;
 import br.com.sistemadepresenca.falta.FaltaResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -35,6 +38,10 @@ import jakarta.validation.Valid;
 public class FaltaController {
     @Autowired
     private FaltaRepository repository;
+    @Autowired
+    private AlunoRepository alunoRepository;
+    @Autowired
+    private AulaRepository aulaRepository;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
@@ -43,52 +50,36 @@ public class FaltaController {
             @ApiResponse(responseCode = "201", description = "Falta salva com sucesso"),
             @ApiResponse(responseCode = "400", description = "Requisição inválida"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Falta> saveFalta(@RequestBody @Valid FaltaRequestDTO data) {
+    public ResponseEntity<Falta> saveFalta(@RequestParam Long idAula, @RequestParam Long idAluno,
+                                            @RequestParam boolean presenca, @RequestParam String justificativa) {
         try {
-            Falta faltaData = new Falta(data);
+            // Obter as instâncias de Aluno e Aula a partir dos seus IDs
+            Optional<Aluno> aluno = alunoRepository.findById(idAluno);
+            Optional<Aula> aula = aulaRepository.findById(idAula);
+    
+            if (!aluno.isPresent() || !aula.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+    
+            // Criar uma nova falta associando o aluno, a aula e os outros dados fornecidos
+            Falta faltaData = new Falta();
+            faltaData.setAluno(aluno.get());
+            faltaData.setAula(aula.get());
+            faltaData.setPresenca(presenca);
+            faltaData.setJustificativa(justificativa);
+    
+            // Salvar a falta no repositório
             Falta savedFalta = repository.save(faltaData);
+    
+            // Retornar a resposta de sucesso
             return ResponseEntity.status(HttpStatus.CREATED).body(savedFalta);
         } catch (Exception ex) {
+            // Em caso de erro, retornar uma resposta de erro interno do servidor
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/criar")
-    @Operation(summary = "Criar falta", description = "Cria uma nova falta com os dados fornecidos.", tags = { "Faltas" })
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Falta criada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
-            @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Falta> criarFalta(
-            @RequestParam Long idAluno,
-            @RequestParam Long idAula,
-            @RequestParam boolean presenca,
-            @RequestParam String justificativa) {
-        try {
-            // Aqui você pode adicionar lógica para validar os parâmetros, por exemplo, verificar se os IDs existem no banco de dados
-            
-            // Criar um objeto Aluno e Aula com os IDs fornecidos
-            Aluno aluno = new Aluno();
-            aluno.setId(idAluno);
-            
-            Aula aula = new Aula();
-            aula.setId(idAula);
-            
-            // Criar um objeto Falta com os dados fornecidos
-            Falta falta = new Falta();
-            falta.setAluno(aluno);
-            falta.setAula(aula);
-            falta.setPresenca(presenca);
-            falta.setJustificativa(justificativa);
-            
-            // Salvar a falta no banco de dados
-            Falta savedFalta = repository.save(falta);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedFalta);
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     @GetMapping
     @Operation(summary = "Listar falta", description = "Retorna a lista de falta cadastrados", tags = {
@@ -111,7 +102,7 @@ public class FaltaController {
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
     public ResponseEntity<Falta> updateFalta(@RequestBody Falta data) {
         try {
-            if (data.getId_presenca() > 0) {
+            if (data.getId_falta() > 0) {
                 Falta updateFalta = repository.save(data);
                 return ResponseEntity.ok(updateFalta);
             } else {

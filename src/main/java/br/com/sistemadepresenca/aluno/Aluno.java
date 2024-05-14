@@ -5,10 +5,11 @@ import java.sql.Date;
 import br.com.sistemadepresenca.turma.Turma;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Table(name = "aluno")
 @Entity(name = "aluno")
-@Getter
+@Getter @Setter
 public class Aluno {
 
     @Id

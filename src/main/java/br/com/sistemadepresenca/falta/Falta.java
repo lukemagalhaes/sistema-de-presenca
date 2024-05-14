@@ -10,15 +10,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter
 @Table(name = "falta")
 @Entity(name = "falta")
-
 public class Falta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_presenca;
+    private Long id_falta;
 
     @ManyToOne
     @JoinColumn(name = "id_aluno")
