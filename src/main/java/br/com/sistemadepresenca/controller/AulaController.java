@@ -3,10 +3,14 @@ package br.com.sistemadepresenca.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.sistemadepresenca.aluno.Aluno;
 import br.com.sistemadepresenca.aula.Aula;
 import br.com.sistemadepresenca.aula.AulaRepository;
 import br.com.sistemadepresenca.aula.AulaRequestDTO;
 import br.com.sistemadepresenca.aula.AulaResponseDTO;
+import br.com.sistemadepresenca.falta.FaltaRepository;
+import br.com.sistemadepresenca.professor.Professor;
+import br.com.sistemadepresenca.professor.ProfessorRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AulaController {
    @Autowired
    private AulaRepository repository;
+   @Autowired
+   private ProfessorRepository professorRepository;
 
    @CrossOrigin(origins = "*", allowedHeaders = "*")
    @PostMapping
@@ -136,4 +143,28 @@ public class AulaController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       }
    }
+
+   @GetMapping("/por-professor/{professorId}")
+   @Operation(summary = "Buscar Aula por Professor", description = "Busca as aulas associadas a um professor pelo seu ID.", tags = { "Aulas" })
+   @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "Aulas encontradas com sucesso"),
+      @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+      @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+   public ResponseEntity<List<Aula>> getAulasByProfessorId(@PathVariable Long professorId) {
+      try {
+         Optional<Professor> professor = professorRepository.findById(professorId);
+         if (professor.isPresent()) {
+               List<Aula> aulas = repository.findByProfessor(professor.get());
+               if (aulas.isEmpty()) {
+                  return ResponseEntity.notFound().build();
+               }
+               return ResponseEntity.ok(aulas);
+         } else {
+               return ResponseEntity.notFound().build(); // Professor não encontrado
+         }
+      } catch (Exception ex) {
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      }
+   }
+
 }

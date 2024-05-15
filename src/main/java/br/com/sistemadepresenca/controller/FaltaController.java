@@ -26,7 +26,6 @@ import br.com.sistemadepresenca.falta.Falta;
 import br.com.sistemadepresenca.falta.FaltaRepository;
 import br.com.sistemadepresenca.falta.FaltaResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -100,18 +99,48 @@ public class FaltaController {
             @ApiResponse(responseCode = "200", description = "Falta atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
-    public ResponseEntity<Falta> updateFalta(@RequestBody Falta data) {
+    public ResponseEntity<Falta> updateFalta(@PathVariable Long id,
+                                              @RequestParam Long idAula,
+                                              @RequestParam Long idAluno,
+                                              @RequestParam boolean presenca,
+                                              @RequestParam String justificativa) {
         try {
-            if (data.getId_falta() > 0) {
-                Falta updateFalta = repository.save(data);
-                return ResponseEntity.ok(updateFalta);
-            } else {
+            // Verificar se o ID da falta é válido
+            if (id <= 0) {
                 return ResponseEntity.badRequest().build();
             }
+    
+            // Obter as instâncias de Aluno e Aula a partir dos seus IDs
+            Optional<Aluno> aluno = alunoRepository.findById(idAluno);
+            Optional<Aula> aula = aulaRepository.findById(idAula);
+    
+            if (!aluno.isPresent() || !aula.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+    
+            // Verificar se a falta que está sendo atualizada existe
+            Optional<Falta> faltaOptional = repository.findById(id);
+            if (!faltaOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+    
+            // Atualizar os dados da falta existente
+            Falta falta = faltaOptional.get();
+            falta.setAluno(aluno.get());
+            falta.setAula(aula.get());
+            falta.setPresenca(presenca);
+            falta.setJustificativa(justificativa);
+    
+            // Salvar a falta atualizada no repositório
+            Falta updatedFalta = repository.save(falta);
+    
+            // Retornar a falta atualizada
+            return ResponseEntity.ok(updatedFalta);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar falta", description = "Manda uma requisição que apaga um falta passado como //parâmetro", tags = {
