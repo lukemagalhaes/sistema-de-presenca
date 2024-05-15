@@ -3,12 +3,10 @@ package br.com.sistemadepresenca.controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.sistemadepresenca.aluno.Aluno;
 import br.com.sistemadepresenca.aula.Aula;
 import br.com.sistemadepresenca.aula.AulaRepository;
 import br.com.sistemadepresenca.aula.AulaRequestDTO;
 import br.com.sistemadepresenca.aula.AulaResponseDTO;
-import br.com.sistemadepresenca.falta.FaltaRepository;
 import br.com.sistemadepresenca.professor.Professor;
 import br.com.sistemadepresenca.professor.ProfessorRepository;
 import io.swagger.v3.oas.annotations.Operation;
