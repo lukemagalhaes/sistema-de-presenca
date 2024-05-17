@@ -7,6 +7,11 @@ import br.com.sistemadepresenca.aluno.Aluno;
 import br.com.sistemadepresenca.aluno.AlunoRepository;
 import br.com.sistemadepresenca.aluno.AlunoRequestDTO;
 import br.com.sistemadepresenca.aluno.AlunoResponseDTO;
+import br.com.sistemadepresenca.aula.Aula;
+import br.com.sistemadepresenca.professor.Professor;
+import br.com.sistemadepresenca.professor.ProfessorRepository;
+import br.com.sistemadepresenca.turma.Turma;
+import br.com.sistemadepresenca.turma.TurmaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,6 +42,8 @@ import java.util.stream.Collectors;
 public class AlunoController {
     @Autowired
     private AlunoRepository repository;
+    @Autowired
+    private TurmaRepository turmaRepository;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
@@ -138,4 +146,27 @@ public class AlunoController {
         }
     }
 
+    @GetMapping("/turma/{turmaId}")
+    @Operation(summary = "Listar alunos por turma", description = "Retorna a lista de alunos cadastrados em uma turma específica", tags = {
+            "Alunos" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Alunos encontrados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+    public ResponseEntity<List<Aluno>> getAlunosByTurmaId(@PathVariable Long turmaId){
+        try {
+            Optional<Turma> turma = turmaRepository.findById(turmaId);
+            if (turma.isPresent()) {
+                List<Aluno> alunos = repository.findByTurma(turma.get());
+                if (alunos.isEmpty()) {
+                   return ResponseEntity.notFound().build();
+                }
+                return ResponseEntity.ok(alunos);
+          } else {
+                return ResponseEntity.notFound().build();
+          }
+       } catch (Exception ex) {
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+       }
+    }
 }
