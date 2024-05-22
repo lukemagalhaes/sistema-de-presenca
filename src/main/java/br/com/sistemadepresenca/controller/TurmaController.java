@@ -31,11 +31,13 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/turma")
 @Tag(name = "Controller turma", description = "Métodos HTTP do turma")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class TurmaController {
     @Autowired
     private TurmaRepository repository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+   
     @PostMapping
     @Operation(summary = "Salvar turma", description = "Salva uma nova turma.", tags = { "Turma" })
     @ApiResponses({

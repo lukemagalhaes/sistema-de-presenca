@@ -31,11 +31,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/professor")
 @Tag(name = "Controller professor", description = "Métodos HTTP do professor")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProfessorController {
     @Autowired
     private ProfessorRepository repository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     @Operation(summary = "Salvar professor", description = "Salva uma nova professor.", tags = { "Professor" })
     @ApiResponses({

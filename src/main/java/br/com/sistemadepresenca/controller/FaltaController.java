@@ -42,7 +42,6 @@ public class FaltaController {
     @Autowired
     private AulaRepository aulaRepository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     @Operation(summary = "Salvar falta", description = "Salva uma nova falta.", tags = { "Faltas" })
     @ApiResponses({

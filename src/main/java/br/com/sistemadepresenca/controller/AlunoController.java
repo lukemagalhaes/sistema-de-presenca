@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/alunos")
 @Tag(name = "Controller Aluno", description = "Métodos HTTP dos alunos")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 
 public class AlunoController {
     @Autowired
@@ -45,7 +46,6 @@ public class AlunoController {
     @Autowired
     private TurmaRepository turmaRepository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     @Operation(summary = "Salvar aluno", description = "Salva um novo aluno.", tags = { "Alunos" })
     @ApiResponses({

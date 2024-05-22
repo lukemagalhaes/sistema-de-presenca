@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/api/aulas")
 @Tag(name = "Controller Aula", description = "Métodos HTTP das Aulas")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 
 public class AulaController {
    @Autowired
@@ -42,7 +43,6 @@ public class AulaController {
    @Autowired
    private ProfessorRepository professorRepository;
 
-   @CrossOrigin(origins = "*", allowedHeaders = "*")
    @PostMapping
    @Operation(summary = "Salvar Aula", description = "Salva uma nova Aula.", tags = { "Aulas" })
    @ApiResponses({
