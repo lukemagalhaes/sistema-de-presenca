@@ -6,11 +6,12 @@ const RegisterAbsence = () => {
   const [turmas, setTurmas] = useState([]);
   const [selectedTurma, setSelectedTurma] = useState("");
   const [students, setStudents] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState("");
-  const [attendance, setAttendance] = useState(true);
-  const [justification, setJustification] = useState("");
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  const [aulas, setAulas] = useState([]);
+  const [selectedAula, setSelectedAula] = useState("");
+  const [professores, setProfessores] = useState([]);
+  const [selectedProfessor, setSelectedProfessor] = useState("");
 
-  // Fetch all turmas on component mount
   useEffect(() => {
     axios
       .get(`${API_BASE_URL}/api/turma`)
@@ -22,7 +23,6 @@ const RegisterAbsence = () => {
       });
   }, []);
 
-  // Fetch students when selectedTurma changes
   useEffect(() => {
     if (selectedTurma) {
       axios
@@ -37,79 +37,156 @@ const RegisterAbsence = () => {
       setStudents([]);
     }
   }, [selectedTurma]);
+  
+  useEffect(() => {
+    axios
+      .get(`${API_BASE_URL}/api/professor`)
+      .then((response) => {
+        setProfessores(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the professors!", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (selectedProfessor) {
+      axios
+        .get(`${API_BASE_URL}/api/aulas/por-professor/${selectedProfessor}`)
+        .then((response) => {
+          setAulas(response.data);
+        })
+        .catch((error) => {
+          console.error("There was an error fetching the aulas!", error);
+        });
+    } else {
+      setAulas([]);
+    }
+  }, [selectedProfessor]);
+
+  const handleStudentSelection = (studentId) => {
+    setSelectedStudents((prevSelected) =>
+      prevSelected.includes(studentId)
+        ? prevSelected.filter((id) => id !== studentId)
+        : [...prevSelected, studentId]
+    );
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const absenceData = new URLSearchParams();
-    absenceData.append('idAula', 1); // ID da aula, pode ser dinâmico
-    absenceData.append('idAluno', selectedStudent);
-    absenceData.append('presenca', attendance);
-    absenceData.append('justificativa', justification);
+    selectedStudents.forEach((studentId) => {
+      const absenceData = new URLSearchParams();
+      absenceData.append("idAula", selectedAula);
+      absenceData.append("idAluno", studentId);
+      absenceData.append("presenca", false);
+      absenceData.append("justificativa", "n/a");
 
-    axios
-      .post(`${API_BASE_URL}/api/faltas`, absenceData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
-      .then((response) => {
-        alert("Falta registrada com sucesso!");
-      })
-      .catch((error) => {
-        console.error("There was an error registering the absence!", error);
-      });
+      axios
+        .post(`${API_BASE_URL}/api/faltas`, absenceData, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        })
+        .then((response) => {
+          console.log(`Falta registrada para o aluno ${studentId}`);
+        })
+        .catch((error) => {
+          console.error(
+            `There was an error registering the absence for student ${studentId}`,
+            error
+          );
+        });
+    });
+    alert("Faltas registradas com sucesso!");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Turma:
-        <select
-          value={selectedTurma}
-          onChange={(e) => setSelectedTurma(e.target.value)}
+    <div className="container">
+      <form onSubmit={handleSubmit} className="form">
+        <label>
+          Turma:
+          <select
+            value={selectedTurma}
+            onChange={(e) => setSelectedTurma(e.target.value)}
+            className="select"
+          >
+            <option value="">Selecione uma turma</option>
+            {turmas.map((turma) => (
+              <option key={turma.id_turma} value={turma.id_turma}>
+                {turma.serie}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Professor:
+          <select
+            value={selectedProfessor}
+            onChange={(e) => setSelectedProfessor(e.target.value)}
+            className="select"
+          >
+            <option value="">Selecione um professor</option>
+            {professores.map((professor) => (
+              <option key={professor.id_professor} value={professor.id_professor}>
+                {professor.nome}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Aula:
+          <select
+            value={selectedAula}
+            onChange={(e) => setSelectedAula(e.target.value)}
+            disabled={!selectedTurma}
+            className="select"
+          >
+            <option value="">Selecione uma aula</option>
+            {aulas.map((aula) => (
+              <option key={aula.id_aula} value={aula.id_aula}>
+                {aula.tipo}: {aula.conteudo} - {aula.data}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="submit"
+          disabled={
+            !selectedAula ||
+            selectedStudents.length === 0 ||
+            !selectedProfessor
+          }
+          className="submit-button"
         >
-          <option value="">Selecione uma turma</option>
-          {turmas.map((turma) => (
-            <option key={turma.id_turma} value={turma.id_turma}>
-              {turma.nome}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Aluno:
-        <select
-          value={selectedStudent}
-          onChange={(e) => setSelectedStudent(e.target.value)}
-          disabled={!selectedTurma}
-        >
-          <option value="">Selecione um aluno</option>
-          {students.map((student) => (
-            <option key={student.id_aluno} value={student.id_aluno}>
-              {student.nome}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Presença:
-        <input
-          type="checkbox"
-          checked={attendance}
-          onChange={(e) => setAttendance(e.target.checked)}
-        />
-      </label>
-      <label>
-        Justificativa:
-        <textarea
-          value={justification}
-          onChange={(e) => setJustification(e.target.value)}
-        />
-      </label>
-      <button type="submit" disabled={!selectedStudent}>
-        Registrar Falta
-      </button>
-    </form>
+          Registrar Falta
+        </button>
+      </form>
+      <div className="student-list">
+        <h3>Alunos</h3>
+        {students.length > 0 ? (
+          <ul className="student-ul">
+            {students.map((student) => (
+              <li key={student.id_aluno} className="student-li">
+                <label className="student-label">
+                  <input
+                    type="checkbox"
+                    checked={selectedStudents.includes(student.id_aluno)}
+                    onChange={() =>
+                      handleStudentSelection(student.id_aluno)
+                    }
+                    className="student-checkbox"
+                  />
+                  {student.nome}
+               
+                  </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Selecione uma turma e uma aula para listar os alunos.</p>
+        )}
+      </div>
+    </div>
   );
 };
 

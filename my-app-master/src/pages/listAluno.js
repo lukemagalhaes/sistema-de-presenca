@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import API_BASE_URL from "../ApiConfig.js";
+import "./ListAlunos.css";
 
 const ListAlunos = () => {
   const [alunos, setAlunos] = useState([]);
   const [turmas, setTurmas] = useState([]);
   const [selectedTurma, setSelectedTurma] = useState("");
+  const [faltas, setFaltas] = useState({});
 
   useEffect(() => {
     axios
@@ -30,22 +32,51 @@ const ListAlunos = () => {
         });
     } else {
       setAlunos([]);
+      setFaltas({});
     }
   }, [selectedTurma]);
 
+  useEffect(() => {
+    const fetchFaltas = async () => {
+      if (alunos.length > 0) {
+        const novasFaltas = {};
+        for (const aluno of alunos) {
+          try {
+            const response = await axios.get(`${API_BASE_URL}/api/faltas`, {
+              params: { id_aluno: aluno.id_aluno },
+            });
+            const totalFaltas = response.data.reduce((acc, falta) => acc + falta.quantidade, 0);
+            novasFaltas[aluno.id_aluno] = totalFaltas;
+          } catch (error) {
+            console.error(`Erro ao buscar faltas para o aluno ${aluno.id_aluno}:`, error);
+            novasFaltas[aluno.id_aluno] = 0;
+          }
+        }
+        setFaltas(novasFaltas);
+      }
+    };
+
+    fetchFaltas();
+  }, [alunos]);
+
+  const handleSendEmail = (email) => {
+    window.location.href = `mailto:${email}`;
+  };
+
   return (
-    <div>
+    <div className="container">
       <h1>Lista de Alunos</h1>
       <label>
         Turma:
         <select
+          className="select"
           value={selectedTurma}
           onChange={(e) => setSelectedTurma(e.target.value)}
         >
           <option value="">Selecione uma turma</option>
           {turmas.map((turma) => (
             <option key={turma.id_turma} value={turma.id_turma}>
-              {turma.nome}
+              {turma.serie}
             </option>
           ))}
         </select>
@@ -53,10 +84,12 @@ const ListAlunos = () => {
       
       <div className="student-list">
         <div className="student-header">
-            <span>Nome</span>
-            <span>Ano de Ensino</span>
-            <span>Série</span>
-            <span>Período</span>
+          <span>Nome</span>
+          <span>Ano de Ensino</span>
+          <span>Série</span>
+          <span>Período</span>
+          <span>Faltas</span>
+          <span>Email</span>
         </div>
         {alunos.map((aluno) => (
           <div key={aluno.id_aluno} className="student-row">
@@ -64,6 +97,10 @@ const ListAlunos = () => {
             <span>{aluno.turma.anoEnsino}</span>
             <span>{aluno.turma.serie}</span>
             <span>{aluno.turma.periodo}</span>
+            <span>{faltas[aluno.id_aluno] || 0}</span>
+            <button className="email-button" onClick={() => handleSendEmail(aluno.email)}>
+              Enviar Email
+            </button>
           </div>
         ))}
       </div>

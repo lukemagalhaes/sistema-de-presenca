@@ -1,41 +1,64 @@
-// src/pages/BuscarAluno.js
-import React, { useState } from 'react';
+// src/pages/RelatorioFaltas.js
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '../ApiConfig';
+import './RelatorioFaltas.css';
 
-const BuscarAluno = () => {
-  const [nome, setNome] = useState('');
-  const [alunos, setAlunos] = useState([]);
+const RelatorioFaltas = () => {
+  const [relatorio, setRelatorio] = useState([]);
 
-  const handleSearch = () => {
-    axios.get(`${API_BASE_URL}/api/alunos/buscar`, { params: { aluno: nome } })
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/api/faltas`)
       .then(response => {
-        setAlunos(response.data);
+        const groupedData = groupFaltas(response.data);
+        setRelatorio(groupedData);
       })
       .catch(error => {
-        console.error('There was an error fetching the students!', error);
+        console.error('There was an error fetching the absence report!', error);
       });
+  }, []);
+
+  const groupFaltas = (data) => {
+    const grouped = {};
+    data.forEach(item => {
+      const { aluno, aula, justificativa } = item;
+      const key = `${aluno.turma.anoEnsino}-${aluno.turma.serie}-${aula.professor.nome}-${aula.professor.disciplina}`;
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push({ aluno: aluno.nome, dataFalta: aula.data, justificativa });
+    });
+    return grouped;
   };
 
   return (
-    <div>
-      <h1>Buscar Aluno</h1>
-      <input
-        type="text"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-        placeholder="Nome do aluno"
-      />
-      <button onClick={handleSearch}>Buscar</button>
-      <ul>
-        {alunos.map(aluno => (
-          <li key={aluno.id_aluno}>
-            {aluno.nome}
-          </li>
-        ))}
-      </ul>
+    <div className="relatorio-container"> {}
+      <h1>Relatório de Faltas</h1>
+      {Object.entries(relatorio).map(([key, faltas]) => (
+        <div key={key} className="relatorio-section"> {}
+          <h2>{key}</h2>
+          <div className="table-responsive"> {}
+            <table>
+              <thead>
+                <tr>
+                  <th>Data da Falta</th>
+                  <th>Justificativa</th>
+                </tr>
+              </thead>
+              <tbody>
+                {faltas.map((falta, index) => (
+                  <tr key={index}>
+                    <td>{falta.dataFalta}</td>
+                    <td>{falta.justificativa}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default BuscarAluno;
+export default RelatorioFaltas;

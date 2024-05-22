@@ -11,3 +11,60 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.student-list {
+  max-width: 600px;
+}
+
+.student-ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.student-li {
+  margin-bottom: 10px;
+}
+
+.student-label {
+  display: flex;
+  align-items: center;
+}
+
+.student-checkbox {
+  margin-right: 10px;
+}
