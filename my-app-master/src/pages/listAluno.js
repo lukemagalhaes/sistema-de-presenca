@@ -43,11 +43,20 @@ const ListAlunos = () => {
         for (const aluno of alunos) {
           try {
             const response = await axios.get(`${API_BASE_URL}/api/faltas/aluno/${aluno.id_aluno}`);
-            const totalFaltas = response.data.length;
-            novasFaltas[aluno.id_aluno] = totalFaltas;
+            const totalAulas = response.data.length;
+            const totalFaltas = response.data.filter(falta => !falta.presenca).length;
+            novasFaltas[aluno.id_aluno] = {
+              totalAulas,
+              totalFaltas,
+              porcentagemFaltas: (totalFaltas / totalAulas) * 100,
+            };
           } catch (error) {
             console.error(`Erro ao buscar faltas para o aluno ${aluno.id_aluno}:`, error);
-            novasFaltas[aluno.id_aluno] = 0;
+            novasFaltas[aluno.id_aluno] = {
+              totalAulas: 0,
+              totalFaltas: 0,
+              porcentagemFaltas: 0,
+            };
           }
         }
         setFaltas(novasFaltas);
@@ -86,7 +95,7 @@ const ListAlunos = () => {
           <span>Ano de Ensino</span>
           <span>Série</span>
           <span>Período</span>
-          <span>Faltas</span>
+          <span>Faltas (%)</span>
           <span>Email</span>
         </div>
         {alunos.map((aluno) => (
@@ -95,8 +104,12 @@ const ListAlunos = () => {
             <span>{aluno.turma.anoEnsino}</span>
             <span>{aluno.turma.serie}</span>
             <span>{aluno.turma.periodo}</span>
-            <span>{faltas[aluno.id_aluno] || 0}</span>
-            <button className="email-button" onClick={() => handleSendEmail(aluno.email)}>
+            <span>{(faltas[aluno.id_aluno]?.porcentagemFaltas || 0).toFixed(2)}%</span>
+            <button
+              className="email-button"
+              onClick={() => handleSendEmail(aluno.email)}
+              disabled={(faltas[aluno.id_aluno]?.porcentagemFaltas || 0) <= 20}
+            >
               Enviar Email
             </button>
           </div>

@@ -74,11 +74,11 @@ const RegisterAbsence = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    selectedStudents.forEach((studentId) => {
+    students.forEach((student) => {
       const absenceData = new URLSearchParams();
       absenceData.append("idAula", selectedAula);
-      absenceData.append("idAluno", studentId);
-      absenceData.append("presenca", false);
+      absenceData.append("idAluno", student.id_aluno);
+      absenceData.append("presenca", !selectedStudents.includes(student.id_aluno));
       absenceData.append("justificativa", "n/a");
 
       axios
@@ -88,11 +88,11 @@ const RegisterAbsence = () => {
           },
         })
         .then((response) => {
-          console.log(`Falta registrada para o aluno ${studentId}`);
+          console.log(`Falta registrada para o aluno ${student.id_aluno}`);
         })
         .catch((error) => {
           console.error(
-            `There was an error registering the absence for student ${studentId}`,
+            `There was an error registering the absence for student ${student.id_aluno}`,
             error
           );
         });
@@ -153,7 +153,7 @@ const RegisterAbsence = () => {
           type="submit"
           disabled={
             !selectedAula ||
-            selectedStudents.length === 0 ||
+            students.length === 0 ||
             !selectedProfessor
           }
           className="submit-button"

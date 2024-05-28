@@ -1,68 +1,72 @@
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .student-list {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    width: 100%;
-    overflow-x: auto; /* Adiciona scroll horizontal caso a tabela ultrapasse a largura da tela */
-  }
-  
-  .student-header {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    white-space: nowrap; /* Evita que o texto seja quebrado em várias linhas */
-  }
-  
-  .student-header span {
-    padding: 10px;
-    display: inline-block; /* Torna os cabeçalhos de coluna flexíveis */
-  }
-  
-  .student-row {
-    border-bottom: 1px solid #ccc;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.student-list {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  width: 100%;
+  overflow-x: auto; /* Adiciona scroll horizontal caso a tabela ultrapasse a largura da tela */
+}
+
+.student-header {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  white-space: nowrap; /* Evita que o texto seja quebrado em várias linhas */
+}
+
+.student-header span {
+  padding: 10px;
+  display: inline-block; /* Torna os cabeçalhos de coluna flexíveis */
+}
+
+.student-row {
+  border-bottom: 1px solid #ccc;
+}
+
+.student-row span {
+  display: block; /* Torna as células da tabela flexíveis */
+  padding: 10px;
+}
+
+.email-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.email-button:hover {
+  background-color: #0056b3;
+}
+
+.email-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Media query para dispositivos com largura máxima de 600px */
+@media only screen and (max-width: 600px) {
+  .student-header span,
   .student-row span {
-    display: block; /* Torna as células da tabela flexíveis */
-    padding: 10px;
-  }
-  
-  .email-button {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .email-button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Media query para dispositivos com largura máxima de 600px */
-  @media only screen and (max-width: 600px) {
-    .student-header span,
-    .student-row span {
       padding: 8px; /* Reduz o espaçamento interno para melhor aproveitamento do espaço */
-    }
-  
-    .student-row span:nth-child(1) { /* Ajusta o estilo da primeira coluna (Nome) */
-      font-weight: bold; /* Torna o texto em negrito */
-    }
-  
-    .email-button {
-      padding: 6px 10px; /* Reduz o tamanho do botão para melhor ajuste em dispositivos menores */
-    }
   }
-  
+
+  .student-row span:nth-child(1) { /* Ajusta o estilo da primeira coluna (Nome) */
+      font-weight: bold; /* Torna o texto em negrito */
+  }
+
+  .email-button {
+      padding: 6px 10px; /* Reduz o tamanho do botão para melhor ajuste em dispositivos menores */
+  }
+}
