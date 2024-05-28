@@ -25,6 +25,7 @@ import br.com.sistemadepresenca.aula.AulaRepository;
 import br.com.sistemadepresenca.falta.Falta;
 import br.com.sistemadepresenca.falta.FaltaRepository;
 import br.com.sistemadepresenca.falta.FaltaResponseDTO;
+import br.com.sistemadepresenca.turma.Turma;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -51,7 +52,6 @@ public class FaltaController {
     public ResponseEntity<Falta> saveFalta(@RequestParam Long idAula, @RequestParam Long idAluno,
                                             @RequestParam boolean presenca, @RequestParam String justificativa) {
         try {
-            // Obter as instâncias de Aluno e Aula a partir dos seus IDs
             Optional<Aluno> aluno = alunoRepository.findById(idAluno);
             Optional<Aula> aula = aulaRepository.findById(idAula);
     
@@ -59,26 +59,20 @@ public class FaltaController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
     
-            // Criar uma nova falta associando o aluno, a aula e os outros dados fornecidos
             Falta faltaData = new Falta();
             faltaData.setAluno(aluno.get());
             faltaData.setAula(aula.get());
             faltaData.setPresenca(presenca);
             faltaData.setJustificativa(justificativa);
     
-            // Salvar a falta no repositório
             Falta savedFalta = repository.save(faltaData);
     
-            // Retornar a resposta de sucesso
             return ResponseEntity.status(HttpStatus.CREATED).body(savedFalta);
         } catch (Exception ex) {
-            // Em caso de erro, retornar uma resposta de erro interno do servidor
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     
-
-
     @GetMapping
     @Operation(summary = "Listar falta", description = "Retorna a lista de falta cadastrados", tags = {
             "Faltas" })
@@ -92,7 +86,7 @@ public class FaltaController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Atualizar falta", description = "Atualiza um falta da lista passando o ID como //parâmetro.", tags = {
+    @Operation(summary = "Atualizar falta", description = "Atualiza um falta da lista passando o ID como parâmetro.", tags = {
             "Faltas" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Falta atualizada com sucesso"),
@@ -104,12 +98,10 @@ public class FaltaController {
                                               @RequestParam boolean presenca,
                                               @RequestParam String justificativa) {
         try {
-            // Verificar se o ID da falta é válido
             if (id <= 0) {
                 return ResponseEntity.badRequest().build();
             }
     
-            // Obter as instâncias de Aluno e Aula a partir dos seus IDs
             Optional<Aluno> aluno = alunoRepository.findById(idAluno);
             Optional<Aula> aula = aulaRepository.findById(idAula);
     
@@ -117,32 +109,27 @@ public class FaltaController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
     
-            // Verificar se a falta que está sendo atualizada existe
             Optional<Falta> faltaOptional = repository.findById(id);
             if (!faltaOptional.isPresent()) {
                 return ResponseEntity.notFound().build();
             }
     
-            // Atualizar os dados da falta existente
             Falta falta = faltaOptional.get();
             falta.setAluno(aluno.get());
             falta.setAula(aula.get());
             falta.setPresenca(presenca);
             falta.setJustificativa(justificativa);
     
-            // Salvar a falta atualizada no repositório
             Falta updatedFalta = repository.save(falta);
     
-            // Retornar a falta atualizada
             return ResponseEntity.ok(updatedFalta);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletar falta", description = "Manda uma requisição que apaga um falta passado como //parâmetro", tags = {
+    @Operation(summary = "Deletar falta", description = "Manda uma requisição que apaga um falta passado como parâmetro", tags = {
             "Faltas" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Falta apagada com sucesso"),
@@ -158,7 +145,7 @@ public class FaltaController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consultar falta específico", description = "Consulta na lista de faltas o ID passado //como parâmetro", tags = {
+    @Operation(summary = "Consultar falta específico", description = "Consulta na lista de faltas o ID passado como parâmetro", tags = {
             "Faltas" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Falta específico buscado com sucesso"),
@@ -167,13 +154,38 @@ public class FaltaController {
     public ResponseEntity<FaltaResponseDTO> getFaltaById(@PathVariable Long id) {
         try {
             Falta falta = repository.findById(id)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             return ResponseEntity.ok(new FaltaResponseDTO(falta));
         } catch (Exception ex) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    
+    @GetMapping("/aluno/{alunoId}")
+    @Operation(summary = "Buscar faltas por aluno", description = "Busca faltas pelo ID do aluno", tags = { "Faltas" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Faltas buscadas com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor") })
+    public ResponseEntity<List<FaltaResponseDTO>> getFaltasByAlunoId(@PathVariable Long alunoId) {
+        try {
+            Optional<Aluno> aluno = alunoRepository.findById(alunoId);
+            if (aluno.isPresent()) {
+                List<Falta> faltas = repository.findByAluno(aluno.get());
+                if (faltas.isEmpty()) {
+                    return ResponseEntity.notFound().build();
+                }
+                List<FaltaResponseDTO> faltaResponseDTOs = faltas.stream()
+                        .map(FaltaResponseDTO::new)
+                        .collect(Collectors.toList());
+                return ResponseEntity.ok(faltaResponseDTOs);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
     @GetMapping("/buscar")
     @Operation(summary = "Buscar falta", description = "Busca pelo nome e retorna suas informações.", tags = {
             "Faltas" })
