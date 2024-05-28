@@ -42,10 +42,8 @@ const ListAlunos = () => {
         const novasFaltas = {};
         for (const aluno of alunos) {
           try {
-            const response = await axios.get(`${API_BASE_URL}/api/faltas`, {
-              params: { id_aluno: aluno.id_aluno },
-            });
-            const totalFaltas = response.data.reduce((acc, falta) => acc + falta.quantidade, 0);
+            const response = await axios.get(`${API_BASE_URL}/api/faltas/aluno/${aluno.id_aluno}`);
+            const totalFaltas = response.data.length;
             novasFaltas[aluno.id_aluno] = totalFaltas;
           } catch (error) {
             console.error(`Erro ao buscar faltas para o aluno ${aluno.id_aluno}:`, error);
