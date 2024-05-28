@@ -25,6 +25,7 @@ public class Aluno {
     private String genero;
     private Date dataNascimento;
     private String endereco;
+    private String email;
 
     public Aluno() {
     }
@@ -35,6 +36,7 @@ public class Aluno {
         this.genero = data.genero();
         this.dataNascimento = data.dataNascimento();
         this.endereco = data.endereco();
+        this.email = data.email();
     }
 
 }

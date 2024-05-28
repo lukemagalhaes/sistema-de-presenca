@@ -12,5 +12,6 @@ public record AlunoRequestDTO(
         @NotEmpty int idade,
         @NotEmpty String genero,
         @NotEmpty Date dataNascimento,
-        @NotEmpty String endereco) {
+        @NotEmpty String endereco,
+        @NotEmpty String email) {
 }
