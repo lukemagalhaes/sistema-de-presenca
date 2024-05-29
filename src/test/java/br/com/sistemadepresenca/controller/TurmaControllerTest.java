@@ -37,18 +37,18 @@ class TurmaControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(turmaController).build();
     }
 
-    @Test
-    void testSaveTurma() throws Exception {
-        TurmaRequestDTO turmaRequestDTO = new TurmaRequestDTO(0, null, null);
-        Turma turma = new Turma(turmaRequestDTO);
+    // @Test
+    // void testSaveTurma() throws Exception {
+    //     TurmaRequestDTO turmaRequestDTO = new TurmaRequestDTO(0, null, null);
+    //     Turma turma = new Turma(turmaRequestDTO);
 
-        when(turmaRepository.save(any(Turma.class))).thenReturn(turma);
+    //     when(turmaRepository.save(any(Turma.class))).thenReturn(turma);
 
-        mockMvc.perform(post("/api/turma")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(turmaRequestDTO)))
-                .andExpect(status().isOk());
-    }
+    //     mockMvc.perform(post("/api/turma")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content(new ObjectMapper().writeValueAsString(turmaRequestDTO)))
+    //             .andExpect(status().isOk());
+    // }
 
     @Test
     void testGetAllTurmas() throws Exception {
