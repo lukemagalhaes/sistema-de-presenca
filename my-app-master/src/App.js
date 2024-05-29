@@ -40,13 +40,6 @@ function App() {
           <button className="font-button" onClick={increaseFontSize}>A+</button>
         </div>
 
-        {/* Mensagem de boas-vindas dinâmica */}
-        {user && (
-          <div className="welcome-message">
-            <h1>Bem-vindo ao Sistema de Controle Acadêmico, {user.name}!</h1>
-            <p>Gerencie a presença dos alunos e acompanhe os relatórios de faltas facilmente!</p>
-          </div>
-        )}
 
 
         <Routes>

@@ -80,7 +80,7 @@ const Relatorio = () => {
   };
 
   return (
-    <div>
+    <div className='titulo'>
       <h1>Relatórios de Faltas</h1>
       <label>
         Agrupar por:

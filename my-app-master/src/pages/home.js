@@ -3,7 +3,7 @@ import React from 'react';
 
 const Home = () => {
   return (
-    <div>
+    <div className="welcome-message">
       <h1>Bem-vindo ao Sistema de Presença</h1>
       <p>Use o menu acima para navegar pelo sistema.</p>
     </div>
