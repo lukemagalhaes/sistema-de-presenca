@@ -25,7 +25,6 @@ import br.com.sistemadepresenca.aula.AulaRepository;
 import br.com.sistemadepresenca.falta.Falta;
 import br.com.sistemadepresenca.falta.FaltaRepository;
 import br.com.sistemadepresenca.falta.FaltaResponseDTO;
-import br.com.sistemadepresenca.turma.Turma;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

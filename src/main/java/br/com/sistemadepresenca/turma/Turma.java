@@ -31,4 +31,9 @@ public class Turma {
         this.serie = data.serie();
         this.periodo = data.periodo();
     }
+
+    public void setSerie(String serie) {
+        this.serie = serie;
+    }
+
 }
