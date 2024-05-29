@@ -1,15 +1,20 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/home';
 import RegisterAbsence from './pages/registroFalta';
 import ListAlunos from './pages/listAluno';
 import BuscarAluno from './pages/buscarAluno';
-import './App.css'; // Se você tiver um arquivo CSS para estilização
 import Relatorio from './pages/relatorio';
+import './App.css'; // Se você tiver um arquivo CSS para estilização
 
 function App() {
   const [fontSize, setFontSize] = useState(16);
+  const [user] = useState({ name: "John Doe" }); // Simulação de um usuário logado
+  const [theme, setTheme] = useState('light'); // Estado do tema (light ou dark)
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
 
   const increaseFontSize = () => {
     setFontSize(prevFontSize => prevFontSize + 2);
@@ -21,7 +26,7 @@ function App() {
 
   return (
     <Router>
-      <div style={{ fontSize: `${fontSize}px` }}>
+      <div className={`app ${theme}`} style={{ fontSize: `${fontSize}px` }}>
         <nav>
           <ul>
             <li><Link to="/">Home</Link></li>
@@ -31,9 +36,19 @@ function App() {
           </ul>
         </nav>
         <div className="font-controls">
-          <button onClick={decreaseFontSize}>- Aa</button>
-          <button onClick={increaseFontSize}>+ Aa</button>
+          <button className="font-button" onClick={decreaseFontSize}>A-</button>
+          <button className="font-button" onClick={increaseFontSize}>A+</button>
         </div>
+
+        {/* Mensagem de boas-vindas dinâmica */}
+        {user && (
+          <div className="welcome-message">
+            <h1>Bem-vindo ao Sistema de Controle Acadêmico, {user.name}!</h1>
+            <p>Gerencie a presença dos alunos e acompanhe os relatórios de faltas facilmente!</p>
+          </div>
+        )}
+
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/registroFalta" element={<RegisterAbsence />} />

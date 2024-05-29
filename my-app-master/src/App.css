@@ -1,240 +1,143 @@
-/* src/App.css */
+/* Estilos globais */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #ffffff; /* Branco */
+  color: #000000; /* Preto */
 }
 
+/* Estilos de navegação */
 nav {
-  background-color: #333;
+  background-color: #4d4d4d; /* Cor de fundo da barra de navegação */
   color: white;
-  padding: 1rem;
+  padding: 1rem 0; /* Reduzindo o preenchimento na parte superior e inferior */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Definindo a largura para ocupar toda a largura da tela */
 }
 
 nav ul {
   list-style: none;
   padding: 0;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  width: 100%; /* Definindo a largura para ocupar toda a largura da tela */
 }
 
 nav ul li {
-  display: inline;
+  margin: 0 1rem; /* Aumentando o espaço entre os itens de navegação */
 }
 
 nav ul li a {
   color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #4d4d4d; /* Cor de fundo dos botões */
+  border: 1px solid #4d4d4d; /* Cor da borda dos botões */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adicionando sombra sutil */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando transições */
 }
 
 nav ul li a:hover {
-  text-decoration: underline;
+  background-color: #333; /* Cor de fundo dos botões ao passar o mouse */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Aumentando a sombra ao passar o mouse */
 }
 
-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-}
-
-form {
-  background: white;
-  padding: 2rem;
-  margin: 2rem;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-  display: block;
-  margin-bottom: 1rem;
-}
-
-form input[type="text"],
-form input[type="checkbox"],
-form select,
-form textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-form button {
-  background-color: #333;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-form button:hover {
-  background-color: #555;
-}
-
-h1 {
-  color: #333;
-}
-
-ul {
-  padding: 0;
-}
-
-ul li {
-  list-style: none;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #ccc;
-}
-
-ul li:last-child {
-  border-bottom: none;
-}
-
-ul li a {
-  text-decoration: none;
-  color: #333;
-}
-
-ul li a:hover {
-  text-decoration: underline;
-}
-
-div {
-  padding: 2rem;
-}
-
+/* Estilos dos botões de controle de fonte */
 .font-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 50%;
+  transform: translateX(50%);
   display: flex;
   justify-content: center;
-  margin: 1rem 0;
-}
-
-.font-controls button {
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  margin: 0 0.5rem;
-  cursor: pointer;
-}
-
-.font-controls button:hover {
-  background-color: #555;
-}
-
-/* Estilizando a lista de alunos */
-.student-header,
-.student-row {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 1rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  align-items: center;
   margin-bottom: 1rem;
 }
 
-.student-header {
-  font-weight: bold;
-}
-
-.student-row span,
-.student-header span {
-  flex: 1;
-  text-align: center;
-  font-size: 1rem;
-  color: #333;
-}
-
-.student-row span:not(:last-child),
-.student-header span:not(:last-child) {
-  border-right: 1px solid #ccc;
-  padding-right: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-.student-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-select {
-  color: #333;
-}
-
-
-
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-nav li {
-  display: inline;
-  margin-right: 20px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #333;
-}
-
-.font-controls {
-  margin-top: 20px;
-}
-
 .font-controls button {
-  margin-right: 10px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #4d4d4d; /* Cor de fundo dos botões */
+  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 50%;
+  padding: 15px; /* Aumentando o tamanho do botão */
+  margin: 0 10px; /* Espaçamento entre os botões */
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando transições */
 }
 
 .font-controls button:hover {
-  background-color: #0056b3;
+  background-color: #333; /* Cor de fundo dos botões ao passar o mouse */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Aumentando a sombra ao passar o mouse */
 }
 
-/* Media query para dispositivos com largura máxima de 600px */
-@media only screen and (max-width: 600px) {
+/* Estilos de boas-vindas */
+.welcome-message {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.welcome-message h1 {
+  font-family: 'Playfair Display', serif;
+  color: #000000; /* Cor do título */
+  font-size: 2rem;
+}
+
+.welcome-message p {
+  color: #333; /* Cor do texto */
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
   nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column; /* Organizar itens verticalmente */
+    align-items: flex-start; /* Alinhar itens à esquerda */
+    width: 100%; /* Ocupar toda a largura da tela */
+    padding: 15px 0; /* Adicionar preenchimento em cima e em baixo */
+    margin: 0; /* Remover margem padrão */
   }
 
-  nav li {
-    margin-bottom: 10px;
+  nav ul li {
+    margin: 10px 0; /* Espaçamento entre os itens */
+    width: 100%; /* Itens ocupam toda a largura da tela */
   }
+}
 
-  .font-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/* Estilos da página de Relatório de Faltas */
+.relatorio-page {
+  padding: 2rem; /* Adicione o espaçamento interno desejado */
+}
 
-  .font-controls button {
-    margin: 5px;
-  }
+.relatorio-title {
+  font-size: 2rem; /* Tamanho do título */
+  margin-bottom: 1rem; /* Espaçamento inferior */
+  color: #333; /* Cor do título */
+}
+
+.relatorio-list {
+  list-style: none;
+  padding: 0;
+}
+
+.relatorio-item {
+  background-color: #f4f4f4; /* Cor de fundo dos itens do relatório */
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem; /* Espaçamento inferior entre os itens */
+}
+
+.relatorio-item-title {
+  font-size: 1.2rem; /* Tamanho do título do item */
+  margin-bottom: 0.5rem; /* Espaçamento inferior */
+  color: #333; /* Cor do título do item */
+}
+
+.relatorio-item-content {
+  font-size: 1rem; /* Tamanho do conteúdo do item */
+  color: #555; /* Cor do conteúdo do item */
 }
